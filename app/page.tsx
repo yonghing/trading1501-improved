@@ -4,7 +4,7 @@ import { useState } from "react"
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
-import { RefreshCw } from "lucide-react"
+import { Maximize2, Minimize2, RefreshCw } from "lucide-react"
 import TradingChart from "@/components/trading-chart"
 import CurrencySelector from "@/components/currency-selector"
 import { Badge } from "@/components/ui/badge"
@@ -13,6 +13,7 @@ export default function Home() {
   const [timeframe, setTimeframe] = useState("H1")
   const [selectedSymbol, setSelectedSymbol] = useState("XAUUSD")
   const [refreshKey, setRefreshKey] = useState(0)
+  const [isFullScreen, setIsFullScreen] = useState(false)
 
   const handleSymbolChange = (symbol) => {
     setSelectedSymbol(symbol)
@@ -24,6 +25,10 @@ export default function Home() {
 
   const handleRefresh = () => {
     setRefreshKey((prev) => prev + 1)
+  }
+
+  const toggleFullScreen = () => {
+    setIsFullScreen((prev) => !prev)
   }
 
   return (
@@ -44,7 +49,7 @@ export default function Home() {
         {/* Main Content */}
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
           {/* Sidebar */}
-          <div className="lg:col-span-1">
+          <div className={`lg:col-span-1 ${isFullScreen ? "hidden" : ""}`}>
             <Card>
               <CardHeader>
                 <CardTitle>Analysis Settings</CardTitle>
@@ -70,28 +75,35 @@ export default function Home() {
           </div>
 
           {/* Main Chart Area */}
-          <div className="lg:col-span-3">
-            <Card>
-              <CardHeader>
+          <div className={isFullScreen ? "col-span-full" : "lg:col-span-3"}>
+            <Card className={isFullScreen ? "fixed inset-0 z-50 rounded-none" : ""}>
+              <CardHeader className="relative">
                 <div className="flex justify-between items-center">
                   <div>
                     <CardTitle>{selectedSymbol} Analysis</CardTitle>
-                    <CardDescription>
-                      {timeframe} timeframe
-                    </CardDescription>
+                    <CardDescription>{timeframe} timeframe</CardDescription>
                   </div>
                   <div className="flex items-center gap-2">
                     <Button variant="outline" size="icon" onClick={handleRefresh} title="Refresh chart">
                       <RefreshCw className="h-4 w-4" />
                     </Button>
+                    <Button
+                      variant="outline"
+                      size="icon"
+                      onClick={toggleFullScreen}
+                      title={isFullScreen ? "Exit full screen" : "Full screen"}
+                    >
+                      {isFullScreen ? <Minimize2 className="h-4 w-4" /> : <Maximize2 className="h-4 w-4" />}
+                    </Button>
                   </div>
                 </div>
               </CardHeader>
-              <CardContent>
+              <CardContent className={isFullScreen ? "h-[calc(100vh-120px)]" : ""}>
                 <TradingChart
                   key={`${selectedSymbol}-${timeframe}-${refreshKey}`}
                   symbol={selectedSymbol}
                   timeframe={timeframe}
+                  isFullScreen={isFullScreen}
                 />
               </CardContent>
             </Card>
@@ -99,7 +111,8 @@ export default function Home() {
         </div>
 
         {/* Additional Sections */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
+        <div className={`grid grid-cols-1 md:grid-cols-2 gap-6 mt-6 ${isFullScreen ? "hidden" : ""}`}>
+
           <Card>
             <CardHeader>
               <CardTitle>Resources</CardTitle>
@@ -132,7 +145,9 @@ export default function Home() {
         </div>
 
         {/* Footer */}
-        <footer className="mt-12 border-t pt-6 text-center text-sm text-slate-600 dark:text-slate-400">
+        <footer
+          className={`mt-12 border-t pt-6 text-center text-sm text-slate-600 dark:text-slate-400 ${isFullScreen ? "hidden" : ""}`}
+        >
           <p>Trading1501 Filter Analysis • Built with Next.js and Tailwind CSS</p>
           <p className="mt-2">© {new Date().getFullYear()} Trading1501. All rights reserved.</p>
         </footer>

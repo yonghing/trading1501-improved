@@ -6,9 +6,10 @@ import { Skeleton } from "@/components/ui/skeleton"
 interface TradingChartProps {
   symbol: string
   timeframe: string
+  isFullScreen?: boolean
 }
 
-export default function TradingChart({ symbol, timeframe }: TradingChartProps) {
+export default function TradingChart({ symbol, timeframe, isFullScreen = false }: TradingChartProps) {
   const [isLoading, setIsLoading] = useState(true)
   const [imageUrl, setImageUrl] = useState("")
   const [error, setError] = useState(false)
@@ -39,15 +40,17 @@ export default function TradingChart({ symbol, timeframe }: TradingChartProps) {
 
   if (isLoading) {
     return (
-      <div className="w-full h-[400px] flex items-center justify-center">
-        <Skeleton className="h-[400px] w-full rounded-md" />
+      <div className={`w-full ${isFullScreen ? "h-full" : "h-[400px]"} flex items-center justify-center`}>
+        <Skeleton className={`${isFullScreen ? "h-full" : "h-[400px]"} w-full rounded-md`} />
       </div>
     )
   }
 
   if (error) {
     return (
-      <div className="w-full h-[400px] flex flex-col items-center justify-center bg-slate-50 dark:bg-slate-800 rounded-md">
+      <div
+        className={`w-full ${isFullScreen ? "h-full" : "h-[400px]"} flex flex-col items-center justify-center bg-slate-50 dark:bg-slate-800 rounded-md`}
+      >
         <p className="text-slate-600 dark:text-slate-400">
           Unable to load chart for {symbol} ({timeframe})
         </p>
@@ -59,11 +62,11 @@ export default function TradingChart({ symbol, timeframe }: TradingChartProps) {
   }
 
   return (
-    <div className="w-full h-[400px] relative">
+    <div className={`w-full ${isFullScreen ? "h-full" : "h-[400px]"} relative`}>
       <img
         src={imageUrl || "/placeholder.svg"}
         alt={`${symbol} ${timeframe} Chart`}
-        className="w-full h-full object-contain rounded-md"
+        className={`w-full h-full object-contain rounded-md ${isFullScreen ? "max-h-[calc(100vh-120px)]" : ""}`}
       />
       <div className="absolute top-2 left-2 bg-white/80 dark:bg-slate-800/80 px-2 py-1 rounded text-sm font-medium">
         {symbol} • {timeframe}

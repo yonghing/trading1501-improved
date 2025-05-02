@@ -21,7 +21,7 @@ export default function CurrencySelector({ selectedSymbol, onSymbolChange }: Cur
   useEffect(() => {
     const fetchSymbols = async () => {
       try {
-        const response = await fetch("https://nextjs-fastapi-henna.vercel.app/api/py/db")
+        const response = await fetch("https://nextjs-fastapi-henna.vercel.app/api/py/ma5time")
         const data = await response.json()
         // Sort the symbols alphabetically by the symbol property
         const sortedData = [...data].sort((a, b) => a.symbol.localeCompare(b.symbol))

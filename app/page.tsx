@@ -1,19 +1,36 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect, useRef } from "react"
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Maximize2, Minimize2, RefreshCw } from "lucide-react"
 import TradingChart from "@/components/trading-chart"
 import CurrencySelector from "@/components/currency-selector"
-import { Badge } from "@/components/ui/badge"
+import TrendAnalysisTable from "@/components/trend-analysis-table"
 
 export default function Home() {
   const [timeframe, setTimeframe] = useState("H1")
   const [selectedSymbol, setSelectedSymbol] = useState("XAUUSD")
   const [refreshKey, setRefreshKey] = useState(0)
   const [isFullScreen, setIsFullScreen] = useState(false)
+  const [scrollPosition, setScrollPosition] = useState(0)
+  const wasFullScreenRef = useRef(false)
+
+  // Track full screen changes and handle scrolling
+  useEffect(() => {
+    if (!isFullScreen && wasFullScreenRef.current) {
+      // When exiting full screen, scroll back to the saved position
+      setTimeout(() => {
+        window.scrollTo({
+          top: scrollPosition,
+          behavior: "smooth",
+        })
+      }, 100) // Small delay to ensure the UI has updated
+    }
+
+    wasFullScreenRef.current = isFullScreen
+  }, [isFullScreen, scrollPosition])
 
   const handleSymbolChange = (symbol) => {
     setSelectedSymbol(symbol)
@@ -28,7 +45,21 @@ export default function Home() {
   }
 
   const toggleFullScreen = () => {
+    if (!isFullScreen) {
+      // Save current scroll position when entering full screen
+      setScrollPosition(window.scrollY)
+    }
     setIsFullScreen((prev) => !prev)
+  }
+
+  const handleViewChart = (symbol: string, timeframe: string) => {
+    // Save the current scroll position
+    setScrollPosition(window.scrollY)
+
+    setSelectedSymbol(symbol)
+    setTimeframe(timeframe)
+    setIsFullScreen(true)
+    setRefreshKey((prev) => prev + 1) // Refresh the chart
   }
 
   return (
@@ -57,7 +88,7 @@ export default function Home() {
               <CardContent className="space-y-6">
                 <div>
                   <h3 className="text-sm font-medium mb-2">Timeframe</h3>
-                  <Tabs defaultValue={timeframe} onValueChange={handleTimeframeChange}>
+                  <Tabs defaultValue={timeframe} onValueChange={handleTimeframeChange} value={timeframe}>
                     <TabsList className="grid grid-cols-3 w-full">
                       <TabsTrigger value="H1">H1</TabsTrigger>
                       <TabsTrigger value="D1">D1</TabsTrigger>
@@ -112,6 +143,16 @@ export default function Home() {
 
         {/* Additional Sections */}
         <div className={`grid grid-cols-1 md:grid-cols-2 gap-6 mt-6 ${isFullScreen ? "hidden" : ""}`}>
+          {/* Trend Analysis Section */}
+          <Card className="md:col-span-2">
+            <CardHeader>
+              <CardTitle>Trend Analysis</CardTitle>
+              <CardDescription>Market trends along 5-days moving average across different timeframes</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <TrendAnalysisTable onViewChart={handleViewChart} />
+            </CardContent>
+          </Card>
 
           <Card>
             <CardHeader>
@@ -123,17 +164,26 @@ export default function Home() {
                   <h3 className="font-medium mb-2">Jobs Worldwide</h3>
                   <ul className="space-y-2 text-sm">
                     <li>
-                      <a href="https://www.linkedin.com/jobs/python-jobs-worldwide" className="text-emerald-600 dark:text-emerald-500 hover:underline flex items-center">
+                      <a
+                        href="https://www.linkedin.com/jobs/python-jobs-worldwide"
+                        className="text-emerald-600 dark:text-emerald-500 hover:underline flex items-center"
+                      >
                         <span className="mr-2">→</span> Python Jobs in Worldwide
                       </a>
                     </li>
                     <li>
-                      <a href="https://www.linkedin.com/jobs/javascript-jobs-worldwide" className="text-emerald-600 dark:text-emerald-500 hover:underline flex items-center">
+                      <a
+                        href="https://www.linkedin.com/jobs/javascript-jobs-worldwide"
+                        className="text-emerald-600 dark:text-emerald-500 hover:underline flex items-center"
+                      >
                         <span className="mr-2">→</span> JavaScript Jobs in Worldwide
                       </a>
                     </li>
                     <li>
-                      <a href="https://survey.stackoverflow.co/2024/technology" className="text-emerald-600 dark:text-emerald-500 hover:underline flex items-center">
+                      <a
+                        href="https://survey.stackoverflow.co/2024/technology"
+                        className="text-emerald-600 dark:text-emerald-500 hover:underline flex items-center"
+                      >
                         <span className="mr-2">→</span> Most popular technologies
                       </a>
                     </li>

@@ -178,7 +178,7 @@ export default function TrendAnalysisTable({ onViewChart }: TrendAnalysisTablePr
       <div className="bg-slate-50 dark:bg-slate-800/50 p-2 rounded-md border border-slate-200 dark:border-slate-700 mb-4">
         <div className="flex items-center justify-center">
           <Clock className="h-4 w-4 mr-2 text-emerald-600 dark:text-emerald-500" />
-          <span className="font-medium">Last Updated: {formatTimestamp(latestUpdate)} (3 hours behind MT5 chart)</span>
+          <span className="font-medium">Last Updated: {formatTimestamp(latestUpdate)}</span>
         </div>
       </div>
 

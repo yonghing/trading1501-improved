@@ -12,7 +12,7 @@ interface TrendData {
   H1: number
   D1: number
   W1: number
-  updated?: string // Changed from update to updated
+  updated?: string
 }
 
 type SortField = "symbol" | "H1" | "D1" | "W1"
@@ -45,7 +45,7 @@ export default function TrendAnalysisTable({ onViewChart }: TrendAnalysisTablePr
 
         setData(jsonData)
 
-        // Find the latest updated timestamp (changed from update to updated)
+        // Find the latest updated timestamp
         let latestTimestamp: string | null = null
 
         jsonData.forEach((item) => {
@@ -138,7 +138,7 @@ export default function TrendAnalysisTable({ onViewChart }: TrendAnalysisTablePr
     )
   }
 
-  // Format the timestamp in a user-friendly way
+  // Format the timestamp in a 24-hour time format
   const formatTimestamp = (timestamp: string | null) => {
     if (!timestamp) return "N/A"
 
@@ -151,7 +151,7 @@ export default function TrendAnalysisTable({ onViewChart }: TrendAnalysisTablePr
         hour: "2-digit",
         minute: "2-digit",
         second: "2-digit",
-        hour12: true,
+        hour12: false, // Changed to false for 24-hour format
       }).format(date)
     } catch (e) {
       console.error("Error formatting timestamp:", e)
@@ -178,7 +178,7 @@ export default function TrendAnalysisTable({ onViewChart }: TrendAnalysisTablePr
       <div className="bg-slate-50 dark:bg-slate-800/50 p-2 rounded-md border border-slate-200 dark:border-slate-700 mb-4">
         <div className="flex items-center justify-center">
           <Clock className="h-4 w-4 mr-2 text-emerald-600 dark:text-emerald-500" />
-          <span className="font-medium">Last Updated: {formatTimestamp(latestUpdate)}</span>
+          <span className="font-medium">Last Updated: {formatTimestamp(latestUpdate)} (3 hours behind MT5 chart)</span>
         </div>
       </div>
 
@@ -225,8 +225,8 @@ export default function TrendAnalysisTable({ onViewChart }: TrendAnalysisTablePr
             </TableRow>
           </TableHeader>
           <TableBody>
-            {sortedData.map((row, index) => (
-              <TableRow key={index} className="hover:bg-slate-50 dark:hover:bg-slate-800/50">
+            {sortedData.map((row) => (
+              <TableRow key={row.id} className="hover:bg-slate-50 dark:hover:bg-slate-800/50">
                 <TableCell className="font-medium">{row.symbol}</TableCell>
                 <TableCell>{renderTrendCell(row.H1, row.symbol, "H1")}</TableCell>
                 <TableCell>{renderTrendCell(row.D1, row.symbol, "D1")}</TableCell>

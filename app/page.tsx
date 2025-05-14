@@ -179,12 +179,25 @@ export default function Home() {
                         <span className="mr-2">→</span> JavaScript Jobs in Worldwide
                       </a>
                     </li>
+                  </ul>
+                </div>
+                <div>
+                  <h3 className="font-medium mb-2">Technologies Worldwide</h3>
+                  <ul className="space-y-2 text-sm">
                     <li>
                       <a
                         href="https://survey.stackoverflow.co/2024/technology"
                         className="text-emerald-600 dark:text-emerald-500 hover:underline flex items-center"
                       >
                         <span className="mr-2">→</span> Most popular technologies
+                      </a>
+                    </li>
+                    <li>
+                      <a
+                        href="https://aiagentslist.com/"
+                        className="text-emerald-600 dark:text-emerald-500 hover:underline flex items-center"
+                      >
+                        <span className="mr-2">→</span> AI agents list
                       </a>
                     </li>
                   </ul>

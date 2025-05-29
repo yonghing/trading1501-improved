@@ -9,13 +9,13 @@ interface TrendData {
   id: number
   symbol: string
   name: string
-  H1: number
+  H4: number
   D1: number
   W1: number
   updated?: string
 }
 
-type SortField = "symbol" | "H1" | "D1" | "W1"
+type SortField = "symbol" | "H4" | "D1" | "W1"
 type SortDirection = "asc" | "desc"
 
 interface TrendAnalysisTableProps {
@@ -48,7 +48,7 @@ export default function TrendAnalysisTable({ onViewChart }: TrendAnalysisTablePr
         // Find the latest updated timestamp
         let latestTimestamp: string | null = null
 
-        jsonData.forEach((item) => {
+        jsonData.forEach((item: TrendData) => {
           if (item.updated) {
             if (!latestTimestamp || new Date(item.updated) > new Date(latestTimestamp)) {
               latestTimestamp = item.updated
@@ -63,10 +63,10 @@ export default function TrendAnalysisTable({ onViewChart }: TrendAnalysisTablePr
         setError("Failed to load trend analysis data. Please try again later.")
         // Set some mock data for fallback
         setData([
-          { id: 1, symbol: "EURUSD", name: "Euro/US Dollar", H1: 1, D1: -1, W1: 1 },
-          { id: 2, symbol: "GBPUSD", name: "British Pound/US Dollar", H1: -1, D1: -1, W1: -1 },
-          { id: 3, symbol: "USDJPY", name: "US Dollar/Japanese Yen", H1: 1, D1: 1, W1: -1 },
-          { id: 4, symbol: "XAUUSD", name: "Gold/US Dollar", H1: 1, D1: 1, W1: 1 },
+          { id: 1, symbol: "EURUSD", name: "Euro/US Dollar", H4: 1, D1: -1, W1: 1 },
+          { id: 2, symbol: "GBPUSD", name: "British Pound/US Dollar", H4: -1, D1: -1, W1: -1 },
+          { id: 3, symbol: "USDJPY", name: "US Dollar/Japanese Yen", H4: 1, D1: 1, W1: -1 },
+          { id: 4, symbol: "XAUUSD", name: "Gold/US Dollar", H4: 1, D1: 1, W1: 1 },
         ])
 
         // Set current time as fallback for timestamp
@@ -198,10 +198,10 @@ export default function TrendAnalysisTable({ onViewChart }: TrendAnalysisTablePr
               <TableHead>
                 <Button
                   variant="ghost"
-                  onClick={() => handleSort("H1")}
+                  onClick={() => handleSort("H4")}
                   className="font-semibold p-0 h-auto hover:bg-transparent hover:text-emerald-600"
                 >
-                  H1 {renderSortIcon("H1")}
+                  H4 {renderSortIcon("H4")}
                 </Button>
               </TableHead>
               <TableHead>
@@ -225,10 +225,10 @@ export default function TrendAnalysisTable({ onViewChart }: TrendAnalysisTablePr
             </TableRow>
           </TableHeader>
           <TableBody>
-            {sortedData.map((row) => (
-              <TableRow key={row.id} className="hover:bg-slate-50 dark:hover:bg-slate-800/50">
+            {sortedData.map((row, index) => (
+              <TableRow key={index} className="hover:bg-slate-50 dark:hover:bg-slate-800/50">
                 <TableCell className="font-medium">{row.symbol}</TableCell>
-                <TableCell>{renderTrendCell(row.H1, row.symbol, "H1")}</TableCell>
+                <TableCell>{renderTrendCell(row.H4, row.symbol, "H4")}</TableCell>
                 <TableCell>{renderTrendCell(row.D1, row.symbol, "D1")}</TableCell>
                 <TableCell>{renderTrendCell(row.W1, row.symbol, "W1")}</TableCell>
               </TableRow>

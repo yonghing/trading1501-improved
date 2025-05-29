@@ -10,7 +10,7 @@ import CurrencySelector from "@/components/currency-selector"
 import TrendAnalysisTable from "@/components/trend-analysis-table"
 
 export default function Home() {
-  const [timeframe, setTimeframe] = useState("H1")
+  const [timeframe, setTimeframe] = useState("H4")
   const [selectedSymbol, setSelectedSymbol] = useState("XAUUSD")
   const [refreshKey, setRefreshKey] = useState(0)
   const [isFullScreen, setIsFullScreen] = useState(false)
@@ -32,11 +32,11 @@ export default function Home() {
     wasFullScreenRef.current = isFullScreen
   }, [isFullScreen, scrollPosition])
 
-  const handleSymbolChange = (symbol) => {
+  const handleSymbolChange = (symbol: string) => {
     setSelectedSymbol(symbol)
   }
 
-  const handleTimeframeChange = (value) => {
+  const handleTimeframeChange = (value: string) => {
     setTimeframe(value)
   }
 
@@ -90,7 +90,7 @@ export default function Home() {
                   <h3 className="text-sm font-medium mb-2">Timeframe</h3>
                   <Tabs defaultValue={timeframe} onValueChange={handleTimeframeChange} value={timeframe}>
                     <TabsList className="grid grid-cols-3 w-full">
-                      <TabsTrigger value="H1">H1</TabsTrigger>
+                      <TabsTrigger value="H4">H4</TabsTrigger>
                       <TabsTrigger value="D1">D1</TabsTrigger>
                       <TabsTrigger value="W1">W1</TabsTrigger>
                     </TabsList>

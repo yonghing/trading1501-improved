@@ -22,7 +22,7 @@ export default function TradingChart({ symbol, timeframe, isFullScreen = false }
     // Construct the image URL with timestamp to prevent caching
     const timestamp = new Date().getTime()
     const filename = `${symbol}${timeframe}.png`
-    const url = `https://server1501.cloud/charts/${filename}?t=${timestamp}`
+    const url = `https://kfbjifllqodenckjdkbv.supabase.co/storage/v1/object/public/charts//${filename}?t=${timestamp}`
 
     setImageUrl(url)
 

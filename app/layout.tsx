@@ -3,7 +3,10 @@ import './globals.css'
 
 export const metadata: Metadata = {
   title: 'Trading1501',
-  description: 'Trading1501 Filter Analysis'
+  description: 'Trading1501 Filter Analysis',
+  icons: {
+    icon: '/favicon.svg',
+  }
 }
 
 export default function RootLayout({
